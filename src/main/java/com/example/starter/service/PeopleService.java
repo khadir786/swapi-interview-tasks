@@ -12,7 +12,7 @@ import java.util.*;
 @Service
 public class PeopleService {
     final String apiUrl = "https://swapi.dev/api/people/";
-    private List<Integer> peopleIds = Arrays.asList(1,2,3,4);
+    private List<Integer> peopleIds = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
 
     /**
      * This method should return a list of people from the Star Wars API.
@@ -37,7 +37,7 @@ public class PeopleService {
                 ResponseEntity<Map> response = restTemplate.getForEntity(apiUrl + id, Map.class);
                 combinedResponse.add(response.getBody());
             } catch (Exception e) {
-                System.err.println("Failed to fetch data for character with id:" + id + ": " + e.getMessage());
+                System.err.println("Failed to fetch data for the character with the ID:" + id + ": " + e.getMessage());
             }
         }
 
@@ -56,5 +56,41 @@ public class PeopleService {
             return "";
         }
     }
+
+    public String getPerson(Integer id) {
+        String endpoint = apiUrl + id;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
+            return response.getBody();
+        } catch (Exception e) {
+            System.err.println("Failed to fetch data for the character with the ID: " + id + ": " + e.getMessage());
+            return "";
+        }
+    }
+
+    public boolean addPerson(Integer id) {
+        try {
+            // validate the person exists by fetching their data
+            String personData = getPerson(id);
+            if (personData == null || personData.isEmpty()) {
+                System.err.println("Character with ID " + id + " does not exist.");
+                return false;
+            }
+            // add the ID to the list if not already present
+            if (!peopleIds.contains(id)) {
+                peopleIds.add(id);
+                System.out.println("Added character with ID " + id);
+                return true;
+            } else {
+                System.out.println("Character with ID " + id + " is already in the list.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.err.println("Error while adding character with ID " + id + ": " + e.getMessage());
+            return false;
+        }
+    }
+
 }
 // could just make it into an actual json object to return... would have to change too many things
