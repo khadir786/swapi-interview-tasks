@@ -12,15 +12,7 @@ import java.util.*;
 @Service
 public class PeopleService {
     final String apiUrl = "https://swapi.dev/api/people/";
-    private Map<String, Integer> peopleIDs = new HashMap<String, Integer>();
-
-    // if you know the IDs for the person, they can be added here
-    PeopleService() {
-        peopleIDs.put("Luke Skywalker", 1);
-        peopleIDs.put("C-3PO", 2);
-        peopleIDs.put("R2-D2", 3);
-        peopleIDs.put("Darth Vader", 4);
-    }
+    private List<Integer> peopleIds = Arrays.asList(1,2,3,4);
 
     /**
      * This method should return a list of people from the Star Wars API.
@@ -39,16 +31,13 @@ public class PeopleService {
         List<Map<String, Object>> combinedResponse = new ArrayList<>();
 
         // iterate over each character and fetch their data
-        for (Map.Entry<String, Integer> entry : peopleIDs.entrySet()) {
-            String characterName = entry.getKey();
-            int characterId = entry.getValue();
-
+        for (Integer id : peopleIds) {
             try {
                 // fetch data for each character and put into a map... map -> json object (each map is its own json object)
-                ResponseEntity<Map> response = restTemplate.getForEntity(apiUrl + characterId, Map.class);
+                ResponseEntity<Map> response = restTemplate.getForEntity(apiUrl + id, Map.class);
                 combinedResponse.add(response.getBody());
             } catch (Exception e) {
-                System.err.println("Failed to fetch data for " + characterName + ": " + e.getMessage());
+                System.err.println("Failed to fetch data for character with id:" + id + ": " + e.getMessage());
             }
         }
 
