@@ -8,16 +8,22 @@ import './app.css';
 function App() {
     const [data, setData] = useState([]);
 
-    useEffect(fetchData, [])
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     const fetchData = () => {
         try {
             fetch('/people')
                 .then(response => response.json())
                 .then(data => {
-                    // set your data here once you're happy for it to pass to the table
                     setData(data);
+                    console.log(data);
+                    for(const character of data) {
+                        console.log(character.name)
+                    }
                 });
+
         } catch (error) {
             console.log(error);
         }
@@ -25,7 +31,7 @@ function App() {
     }
 
     return (
-        <BasicTable/>
+        <BasicTable data={data}/>
     )
 }
 
