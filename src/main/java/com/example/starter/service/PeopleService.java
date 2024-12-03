@@ -56,5 +56,16 @@ public class PeopleService {
         return new ObjectMapper().writeValueAsString(combinedResponse);
     }
 
+    public String getPerson(String name) {
+        String endpoint = apiUrl + "?search=" + name;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
+            return response.getBody();
+        } catch (Exception e) {
+            System.err.println("Failed to fetch data for " + name + ": " + e.getMessage());
+            return "";
+        }
+    }
 }
 // could just make it into an actual json object to return... would have to change too many things
