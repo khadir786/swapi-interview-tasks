@@ -3,10 +3,12 @@ import {createRoot} from "react-dom/client";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BasicTable from "./components/BasicTable.jsx";
 import './app.css';
+import {Container} from "reactstrap";
 
 
 function App() {
     const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         fetchData()
@@ -19,7 +21,8 @@ function App() {
                 .then(data => {
                     setData(data);
                     console.log(data);
-                    for(const character of data) {
+                    setIsLoading(false);
+                    for (const character of data) {
                         console.log(character.name)
                     }
                 });
@@ -31,7 +34,23 @@ function App() {
     }
 
     return (
-        <BasicTable data={data}/>
+        <div className="App">
+            {
+                isLoading ?
+                    <div className="loading" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                        <div className="spinner-border" role="status">
+                            {/*<span className="sr-only">Loading</span>*/}
+                        </div>
+                    </div> :
+
+                    <Container fluid>
+                        <BasicTable data={data}/>
+
+                    </Container>
+            }
+        </div>
+
+
     )
 }
 
