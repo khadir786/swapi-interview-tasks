@@ -23,7 +23,6 @@ public class PeopleController {
         // This will need to connect to the People service.
     }
 
-
     // search for a character -> show results (name only) in a table -> button next to each name -> add to table
     @GetMapping("/person")
     public String getPerson(@RequestParam String name) {
@@ -39,6 +38,9 @@ public class PeopleController {
     public boolean addPerson(@PathVariable("id") Integer id) {
         return peopleService.addPerson(id);
     }
+
+    @DeleteMapping("/person/delete/{id}")
+    public boolean deletePerson(@PathVariable("id") Integer id) {return peopleService.deletePerson(id); }
 
 
 }

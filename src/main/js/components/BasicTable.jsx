@@ -1,7 +1,7 @@
 import React from "react";
 import {Container, Table} from "reactstrap";
 
-function BasicTable({data}) {
+function BasicTable({data, handleDeleteCharacter}) {
     // feed your data here, and build your table around that data
     return <Container fluid>
         <Table className="mt-4">
@@ -23,6 +23,13 @@ function BasicTable({data}) {
                     <td>{character.mass}</td>
                     <td>{character.hair_color}</td>
                     <td>{character.birth_year}</td>
+                    <td>
+                        <button type='button'
+                                className="btn btn-primary btn-sm"
+                                onClick={() => handleDeleteCharacter(character)}
+                        >Delete
+                        </button>
+                    </td>
                 </tr>
 
             ))}

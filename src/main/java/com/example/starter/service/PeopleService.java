@@ -2,6 +2,7 @@ package com.example.starter.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -92,5 +93,14 @@ public class PeopleService {
         }
     }
 
+    public boolean deletePerson(Integer id) {
+        if (peopleIds.contains(id)) {
+            peopleIds.remove(id);
+            System.out.println("Removed character with ID " + id);
+            return true;
+        }
+        System.out.println("Character with ID " + id + " does not exist.");
+        return false;
+    }
 }
 // could just make it into an actual json object to return... would have to change too many things
