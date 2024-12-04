@@ -95,12 +95,26 @@ function App() {
             .catch((error) => console.error("Error:", error));
     };
 
-
+    const handleDeleteCharacter = (character) => {
+        const urlSplit = character.url.split("/");
+        const id = urlSplit[urlSplit.length - 2];
+        fetch(`/person/delete/${id}`, {
+            method: "DELETE",
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to delete character from the backend.");
+                }
+                console.log(`Character with ID ${id} has been deleted from the backend`);
+                setData((prevData) => prevData.filter((item) => item.name !== character.name));
+            })
+            .catch((error) => console.log("Error:", error));
+    };
 
     return (
         <div className="App">
             {isLoading ? <LoadingIcon center={true}/> : <Container fluid>
-                <BasicTable data={data}/>
+                <BasicTable data={data} handleDeleteCharacter={handleDeleteCharacter} />
                 <div className="SearchArea">
                     <div className="SearchBox">
                         <form onSubmit={(e) => e.preventDefault()}>
