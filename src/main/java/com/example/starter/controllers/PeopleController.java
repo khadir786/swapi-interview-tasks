@@ -34,6 +34,11 @@ public class PeopleController {
         return peopleService.getPerson(id);
     }
 
+    @GetMapping("/person/wookie/id")
+    public String getPersonWookie(@RequestParam Integer id) {
+        return peopleService.getPersonWookie(id);
+    }
+
     @PostMapping("/people/add/{id}")
     public boolean addPerson(@PathVariable("id") Integer id) {
         return peopleService.addPerson(id);
