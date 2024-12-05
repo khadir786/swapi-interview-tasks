@@ -1,0 +1,33 @@
+.SearchArea {
+    border: 1px solid #000;
+    display: flex;
+    flex-direction: column;;
+    align-items: center;
+    height: 30vh;
+}
+
+.SearchBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.SearchBox input {
+    margin: 10px;
+}
+
+.ResultsArea {
+    width: 30%;
+}
+
+.ResultSet {
+    display: flex;
+    flex-direction: row;
+    margin: 5px;
+}
+
+.ResultSet > li {
+    margin-right: auto;
+}
