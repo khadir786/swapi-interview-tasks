@@ -96,13 +96,29 @@ function App() {
                 console.log(`${character.name} has been added to the backend.`);
                 // add the character to the frontend table
                 setData((prevData) => [...prevData, character]);
+                fetch(`/person/wookie/id?id=${id}`)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Failed to fetch Wookie character data.");
+                        }
+                        return response.json();
+                    })
+                    .then((wookieCharacter) => {
+                        console.log("Fetched Wookie character:", wookieCharacter);
+                        setWookieData((prevData) => [...prevData, wookieCharacter]);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching Wookie character:", error);
+                    });
             })
             .catch((error) => console.error("Error:", error));
     };
 
     const handleDeleteCharacter = (character) => {
-        const urlSplit = character.url.split("/");
+        const isWookieMode = wookieMode;
+        const urlSplit = isWookieMode ? character.hurcan.split("/") : character.url.split("/");
         const id = urlSplit[urlSplit.length - 2];
+
         fetch(`/person/delete/${id}`, {
             method: "DELETE",
         })
@@ -111,10 +127,18 @@ function App() {
                     throw new Error("Failed to delete character from the backend.");
                 }
                 console.log(`Character with ID ${id} has been deleted from the backend`);
-                setData((prevData) => prevData.filter((item) => item.name !== character.name));
+
+                // remove the character from both normal and wookie data using their ids as an identifier
+                setData((prevData) =>
+                    prevData.filter((item) => item.url.split("/").slice(-2, -1)[0] !== id)
+                );
+                setWookieData((prevData) =>
+                    prevData.filter((item) => item.hurcan.split("/").slice(-2, -1)[0] !== id)
+                );
             })
             .catch((error) => console.log("Error:", error));
     };
+
 
     return (
         <div className="App">

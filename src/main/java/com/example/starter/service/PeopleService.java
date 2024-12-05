@@ -77,6 +77,18 @@ public class PeopleService {
         }
     }
 
+    public String getPersonWookie(Integer id) {
+        String endpoint = apiUrl + id + "?format=wookiee";
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.getForEntity(endpoint, String.class);
+            return response.getBody();
+        } catch (Exception e) {
+            System.err.println("Failed to fetch data for the character with the ID: " + id + ": " + e.getMessage());
+            return "";
+        }
+    }
+
     public boolean addPerson(Integer id) {
         try {
             // validate the person exists by fetching their data
@@ -109,5 +121,7 @@ public class PeopleService {
         System.out.println("Character with ID " + id + " does not exist.");
         return false;
     }
+
+
 }
 // could just make it into an actual json object to return... would have to change too many things
