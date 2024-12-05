@@ -2,7 +2,6 @@ package com.example.starter.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,25 +24,33 @@ public class PeopleService {
      *   <li>Map the JSON response to a list of people.</li>
      *   <li>Return the list of people.</li>
      * </ol>
+     *
      * @return A list of people from the Star Wars API.
      */
+
+    // gets both the standard and wookie response from the api for each character and collates them into a map
     public String getPeople() throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         List<Map<String, Object>> combinedResponse = new ArrayList<>();
+        List<Map<String, Object>> combinedWookieResponse = new ArrayList<>();
+        Object[] responses = new Object[2];
 
         // iterate over each character and fetch their data
         for (Integer id : peopleIds) {
             try {
                 // fetch data for each character and put into a map... map -> json object (each map is its own json object)
                 ResponseEntity<Map> response = restTemplate.getForEntity(apiUrl + id, Map.class);
+                ResponseEntity<Map> wookieResponse = restTemplate.getForEntity(apiUrl + id + "?format=wookiee", Map.class);
                 combinedResponse.add(response.getBody());
+                combinedWookieResponse.add(wookieResponse.getBody());
             } catch (Exception e) {
                 System.err.println("Failed to fetch data for the character with the ID:" + id + ": " + e.getMessage());
             }
         }
-
+        responses[0] = combinedResponse;
+        responses[1] = combinedWookieResponse;
         // convert the combined response to a json string
-        return new ObjectMapper().writeValueAsString(combinedResponse);
+        return new ObjectMapper().writeValueAsString(responses);
     }
 
     public String getPerson(String name) {
